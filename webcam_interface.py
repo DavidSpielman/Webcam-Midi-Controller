@@ -17,7 +17,12 @@ def setup_gui():
     height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
     thickness = 2
     color = (0,255,0)
-    # Rectangles for Note Selection
+    font = cv.FONT_HERSHEY_DUPLEX
+    font_size = 4
+    font_color = (0,255,0)
+    font_thickness = 4
+    line_type = cv.LINE_AA
+    # Rectangles for Note Interval Selection
     top_left = cv.rectangle(flip_frame, (0,int(height/3)), (int(width/3),0), color, thickness) 
     top_center = cv.rectangle(flip_frame, (int(width/3),0), (int(2*width/3),int(height/3)), color, thickness)
     top_right = cv.rectangle(flip_frame, (int(2*width/3),0), (int(width),int(height/3)), color, thickness)
@@ -25,6 +30,14 @@ def setup_gui():
     center_right = cv.rectangle(flip_frame, (int(2*width/3),int(height/3)), (int(width),int(2*height/3)), color, thickness)
     bottom_left = cv.rectangle(flip_frame, (0,int(2*height/3)), (int(width/3),int(height)), color, thickness) 
     bottom_right = cv.rectangle(flip_frame, (int(2*width/3),int(2*height/3)), (int(width),int(height)), color, thickness)
+    # Text Placement for Note Intervals
+    one = cv.putText(flip_frame,'1',(int(width/8),int(9*height/10)), font, font_size,font_color,font_thickness,line_type)
+    two = cv.putText(flip_frame,'2',(int(width/8),int(5.5*height/10)), font, font_size,font_color,font_thickness,line_type)
+    three = cv.putText(flip_frame,'3',(int(width/8),int(2.25*height/10)), font, font_size,font_color,font_thickness,line_type)
+    four = cv.putText(flip_frame,'4',(int(3.75*width/8),int(2.25*height/10)), font, font_size,font_color,font_thickness,line_type)
+    five = cv.putText(flip_frame,'5',(int(6.45*width/8),int(2.25*height/10)), font, font_size,font_color,font_thickness,line_type)
+    six = cv.putText(flip_frame,'6',(int(6.45*width/8),int(5.5*height/10)), font, font_size,font_color,font_thickness,line_type)
+    seven = cv.putText(flip_frame,'7',(int(6.45*width/8),int(9*height/10)), font, font_size,font_color,font_thickness,line_type)
 
 def showROI(flip_frame, boundingBox):
     x, y, w, h = int(boundingBox[0]), int(boundingBox[1]), int(boundingBox[2]), int(boundingBox[3])
