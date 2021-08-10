@@ -24,12 +24,12 @@ def setup_gui():
     font_thickness = 4
     line_type = cv.LINE_AA
     # Rectangles for Note Interval Selection
-    top_left = cv.rectangle(flip_frame, (0,0), (int(width/3),0), color, thickness) 
+    top_left = cv.rectangle(flip_frame, (0,0), (int(width/3),0), color, thickness)
     top_center = cv.rectangle(flip_frame, (int(width/3),0), (int(2*width/3),int(height/3)), color, thickness)
     top_right = cv.rectangle(flip_frame, (int(2*width/3),0), (int(width),int(height/3)), color, thickness)
     center_left = cv.rectangle(flip_frame, (0,int(height/3)), (int(width/3),int(2*height/3)), color, thickness)
     center_right = cv.rectangle(flip_frame, (int(2*width/3),int(height/3)), (int(width),int(2*height/3)), color, thickness)
-    bottom_left = cv.rectangle(flip_frame, (0,int(2*height/3)), (int(width/3),int(height)), color, thickness) 
+    bottom_left = cv.rectangle(flip_frame, (0,int(2*height/3)), (int(width/3),int(height)), color, thickness)
     bottom_right = cv.rectangle(flip_frame, (int(2*width/3),int(2*height/3)), (int(width),int(height)), color, thickness)
     # Text Placement for Note Intervals
     one = cv.putText(flip_frame,'1',(int(width/8),int(9*height/10)), font, font_size,font_color,font_thickness,line_type)
@@ -52,9 +52,9 @@ def interval_selection(): # Uses the coordinates of the dot center to select int
     if center_x >= 0 and center_x <= int(width/3):
         if center_y >= int(2*height/3) and center_y <= int(height):
             print('Selected Interval 1')
-        if center_y >= int(height/3) and center_y <= int(2*height/3):
+        elif center_y >= int(height/3) and center_y <= int(2*height/3):
             print('Selected Interval 2')
-        if center_y >= 0 and center_y <= int(height/3):
+        elif center_y >= 0 and center_y <= int(height/3):
             print('Selected Interval 3')
     elif center_x >= int(width/3) and center_x <= int(2*width/3):
         if center_y >= 0 and center_y <= int(height/3):
@@ -62,18 +62,18 @@ def interval_selection(): # Uses the coordinates of the dot center to select int
     elif center_x >= int(2*width/3) and center_x <= int(width):
         if center_y >= 0 and center_y <= int(height/3):
             print('Selected Interval 5')
-        if center_y >= int(height/3) and center_y <= int(2*height/3):
+        elif center_y >= int(height/3) and center_y <= int(2*height/3):
             print('Selected Interval 6')
-        if center_y >= int(2*height/3) and center_y <= int(height):
+        elif center_y >= int(2*height/3) and center_y <= int(height):
             print('Selected Interval 7')
-    
+
 if not cap.isOpened():
     print('Could not open camera')
     exit()
 
 while True:
     ret, frame = cap.read()
-    flip_frame = cv.flip(frame, 1) 
+    flip_frame = cv.flip(frame, 1)
     if ret == True:
         setup_gui()
         showROI(flip_frame, boundingBox)
