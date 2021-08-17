@@ -1,5 +1,8 @@
 import cv2 as cv
-global ret, frame, flip_frame, boundingBox
+import rospy
+from std_msgs.msg import Int16
+
+global ret, frame, flip_frame, boundingBox, interval
 
 # 0 for built in webcam, 2 for external webcam
 cap = cv.VideoCapture(0, cv.CAP_V4L2) # This added VideoCapture API allows camera fps to be changed from initial 5fps
@@ -11,6 +14,12 @@ ret, frame = cap.read()
 flip_frame = cv.flip(frame, 1) # Mirrors live video for better user experience
 boundingBox = cv.selectROI('MIDI Controller', flip_frame, True)
 tracker.init(flip_frame, boundingBox)
+
+pub = rospy.Publisher('interval', Int16, queue_size = 10)
+rospy.init_node('webcam')
+r = rospy.Rate(10) # 10hz
+interval = 0
+inside_box = False
 
 def setup_gui():
     global width, height
@@ -49,24 +58,42 @@ def showROI(flip_frame, boundingBox):
     dot = cv.circle(flip_frame, (center_x,center_y), 5, (0,0,255), -1)
 
 def interval_selection(): # Uses the coordinates of the dot center to select intervals
+    global interval, inside_box
     if center_x >= 0 and center_x <= int(width/3):
         if center_y >= int(2*height/3) and center_y <= int(height):
-            print('Selected Interval 1')
+            inside_box = True
+            interval = 1
+            #print('Selected Interval 1')
         elif center_y >= int(height/3) and center_y <= int(2*height/3):
-            print('Selected Interval 2')
+            inside_box = True
+            interval = 2
+            #print('Selected Interval 2')
         elif center_y >= 0 and center_y <= int(height/3):
-            print('Selected Interval 3')
+            inside_box = True
+            interval = 3
+            #print('Selected Interval 3')
     elif center_x >= int(width/3) and center_x <= int(2*width/3):
         if center_y >= 0 and center_y <= int(height/3):
-            print('Selected Interval 4')
+            inside_box = True
+            interval = 4
+            #print('Selected Interval 4')
+        elif center_y >= int(height/3) and center_y <= int(height):
+            inside_box = False
+            interval = 0
     elif center_x >= int(2*width/3) and center_x <= int(width):
         if center_y >= 0 and center_y <= int(height/3):
-            print('Selected Interval 5')
+            inside_box = True
+            interval = 5
+            #print('Selected Interval 5')
         elif center_y >= int(height/3) and center_y <= int(2*height/3):
-            print('Selected Interval 6')
+            inside_box = True
+            interval = 6
+            #print('Selected Interval 6')
         elif center_y >= int(2*height/3) and center_y <= int(height):
-            print('Selected Interval 7')
-
+            inside_box = True
+            interval = 7
+            #print('Selected Interval 7')
+            
 if not cap.isOpened():
     print('Could not open camera')
     exit()
@@ -78,6 +105,13 @@ while True:
         setup_gui()
         showROI(flip_frame, boundingBox)
         interval_selection()
+        print(inside_box)
+        if inside_box == True:
+            pub.publish(interval)
+            r.sleep()
+        else:
+            pub.publish(interval)
+            r.sleep()
     else:
         print('Could not return frame')
     cv.imshow('MIDI Controller', flip_frame)
