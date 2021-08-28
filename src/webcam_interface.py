@@ -15,9 +15,9 @@ flip_frame = cv.flip(frame, 1) # Mirrors live video for better user experience
 boundingBox = cv.selectROI('MIDI Controller', flip_frame, True)
 tracker.init(flip_frame, boundingBox)
 
-pub = rospy.Publisher('interval', Int16, queue_size = 10)
+pub = rospy.Publisher('interval', Int16, queue_size = 5)
 rospy.init_node('webcam')
-r = rospy.Rate(10) # 10hz
+r = rospy.Rate(10) # 1hz
 interval = 0
 inside_box = False
 

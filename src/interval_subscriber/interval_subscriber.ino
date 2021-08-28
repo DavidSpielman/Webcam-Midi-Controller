@@ -6,7 +6,7 @@ ros::NodeHandle nh; //initialize ros node
 USBMIDI_Interface midi; //Instantiate MIDI over USB interface
 
 const MIDIAddress note = 0;
-const uint8_t velocity = 0x7F;   // The velocity of the note events
+const uint8_t velocity = 0x7F; // The velocity of the note events
 bool note_on = false;
 
 void interval_msg(const std_msgs::Int16& msg){
@@ -57,9 +57,10 @@ void loop()
 {
   nh.spinOnce();
   delay(500);
+  //interval_msg();  Need a way to constantly check which note has been selected within the loop
   if (note_on == true)
     midi.sendNoteOn(note, velocity);
-    delay(500);
+  else 
     midi.sendNoteOff(note,velocity);
   midi.update(); //read and handle or discard MIDI input
 
