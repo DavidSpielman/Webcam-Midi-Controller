@@ -5,7 +5,7 @@ from std_msgs.msg import Int16
 global ret, frame, flip_frame, boundingBox, interval
 
 # 0 for built in webcam, 2 for external webcam
-cap = cv.VideoCapture(0, cv.CAP_V4L2) # This added VideoCapture API allows camera fps to be changed from initial 5fps
+cap = cv.VideoCapture(2, cv.CAP_V4L2) # This added VideoCapture API allows camera fps to be changed from initial 5fps
 cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280) # 640 x 480 is 480p (30fps on this cam), 1280 x 720 is 720p (7.5 fps on this cam)
 cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
 
@@ -15,9 +15,9 @@ flip_frame = cv.flip(frame, 1) # Mirrors live video for better user experience
 boundingBox = cv.selectROI('MIDI Controller', flip_frame, True)
 tracker.init(flip_frame, boundingBox)
 
-pub = rospy.Publisher('interval', Int16, queue_size = 10)
+pub = rospy.Publisher('interval', Int16, queue_size = 5)
 rospy.init_node('webcam')
-r = rospy.Rate(10) # 10hz
+r = rospy.Rate(10) # 1hz
 interval = 0
 inside_box = False
 
